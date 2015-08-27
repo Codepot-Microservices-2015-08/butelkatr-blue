@@ -1,6 +1,6 @@
 {
     "blue": {
-        "this": "pl/codepot/butelkatr",
+        "this": "foo/bar",
         "dependencies": {
         }
     }
