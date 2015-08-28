@@ -4,12 +4,12 @@ package pl.codepot.butelkatr.bottling.model;
  * @author kubukoz
  *         created on 28/08/15.
  */
-public class Bottle{
-    public Bottle(int wort) {
+public class WortCount {
+    public WortCount(int wort) {
         this.wort = wort;
     }
 
-    public Bottle() {
+    public WortCount() {
     }
 
     public int getWort() {

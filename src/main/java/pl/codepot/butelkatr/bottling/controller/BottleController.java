@@ -1,5 +1,6 @@
 package pl.codepot.butelkatr.bottling.controller;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import pl.codepot.butelkatr.bottling.model.Bottle;
 import pl.codepot.butelkatr.bottling.model.Version;
+import pl.codepot.butelkatr.bottling.model.WortCount;
 import pl.codepot.butelkatr.bottling.service.BottleService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author kubukoz
@@ -20,8 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class BottleController {
-    BottleService bottleService;
     public static final Logger log = LoggerFactory.getLogger(BottleController.class);
+    BottleService bottleService;
+    private AtomicLong wortCountTotal = new AtomicLong(0);
+
 
     @Autowired
     public BottleController(BottleService bottleService) {
@@ -31,11 +35,19 @@ public class BottleController {
     @RequestMapping(value = "/bottle",
             method = RequestMethod.POST,
             consumes = Version.V1)
-    void checkBottle(@RequestBody Bottle bottle, HttpServletResponse response) {
-        boolean bottleValid = bottleService.validateBottle(bottle);
-        log.info("Found a " + (bottleValid?"valid":"invalid") + " bottle");
-        response.setStatus(bottleValid ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_ACCEPTABLE);
+    public synchronized void receiveWort(@RequestBody WortCount wortCount, HttpServletResponse response) throws InterruptedException {
+        wortCountTotal.addAndGet(wortCount.getWort());
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        if (wortCountTotal.get() >= 3000) {
+            bottleService.sendBottlingUpdate();
+            Thread.sleep(5000);
+            log.info("finished");
+            ListenableFuture<Void> promise = bottleService.putBottleCount(wortCountTotal.get() / 100);
+            //noinspection StatementWithEmptyBody
+            while (!promise.isDone())
+            wortCountTotal.set(0);
+        }
     }
 }
-
 
