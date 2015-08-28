@@ -1,5 +1,7 @@
 package pl.codepot.butelkatr.bottling.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class BottleController {
     BottleService bottleService;
+    public static final Logger log = LoggerFactory.getLogger(BottleController.class);
 
     @Autowired
     public BottleController(BottleService bottleService) {
@@ -30,6 +33,7 @@ public class BottleController {
             consumes = Version.V1)
     void checkBottle(@RequestBody Bottle bottle, HttpServletResponse response) {
         boolean bottleValid = bottleService.validateBottle(bottle);
+        log.info("Found a " + (bottleValid?"valid":"invalid") + " bottle");
         response.setStatus(bottleValid ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_ACCEPTABLE);
     }
 }
