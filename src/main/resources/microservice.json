@@ -2,6 +2,7 @@
     "blue": {
         "this": "pl/codepot/butelkatr-blue",
         "dependencies": {
+            "prezentatr": "pl/codepot/prezentatr-blue"
         }
     }
 }
