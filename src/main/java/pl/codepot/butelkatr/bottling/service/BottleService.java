@@ -32,7 +32,7 @@ public class BottleService {
                 .withCircuitBreaker(withGroupKey(asKey("hystrix_group")))
                 .onUrl("/feed/butelkatr")
                 .withoutBody()
-                .withHeaders().contentType("application/vnd.some.other.service.v1+json")
+                .withHeaders().contentType("application/vnd.pl.codepot.prezentatr.v1+json")
                 .andExecuteFor().ignoringResponseAsync();
     }
 
@@ -43,7 +43,7 @@ public class BottleService {
                 .withCircuitBreaker(withGroupKey(asKey("hystrix_group")))
                 .onUrl("/feed/bottles/"+count)
                 .withoutBody()
-                .withHeaders().contentType("application/vnd.some.other.service.v1+json")
+                .withHeaders().contentType("application/vnd.pl.codepot.prezentatr.v1+json")
                 .andExecuteFor().ignoringResponseAsync();
     }
 
