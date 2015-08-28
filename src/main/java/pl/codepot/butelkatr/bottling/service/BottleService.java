@@ -8,8 +8,8 @@ import pl.codepot.butelkatr.bottling.model.Bottle;
  *         created on 28/08/15.
  */
 @Service
-class BottleService{
-    boolean validateBottle(Bottle bottle){
+public class BottleService{
+    public boolean validateBottle(Bottle bottle){
         return bottle != null && bottle.getWort()==1000;
     }
 }

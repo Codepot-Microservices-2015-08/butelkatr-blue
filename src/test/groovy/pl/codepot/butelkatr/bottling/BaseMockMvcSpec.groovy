@@ -1,13 +1,14 @@
 package pl.codepot.butelkatr.bottling
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc
 import pl.codepot.butelkatr.bottling.controller.BottleController
+import pl.codepot.butelkatr.bottling.service.BottleService
 import spock.lang.Specification
 
 abstract class BaseMockMvcSpec extends Specification {
 
     def setup() {
         setupMocks()
-        RestAssuredMockMvc.standaloneSetup(new BottleController())
+        RestAssuredMockMvc.standaloneSetup(new BottleController(new BottleService()))
     }
 
     void setupMocks() {
