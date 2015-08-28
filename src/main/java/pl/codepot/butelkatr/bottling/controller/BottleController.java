@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.codepot.butelkatr.bottling.model.Bottle;
+import pl.codepot.butelkatr.bottling.model.Version;
 import pl.codepot.butelkatr.bottling.service.BottleService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,8 @@ public class BottleController {
     }
 
     @RequestMapping(value = "/bottle",
-            method = RequestMethod.POST, consumes = "application/vnd.pl.codepot.butelkatr.v1+json")
+            method = RequestMethod.POST,
+            consumes = Version.V1)
     void checkBottle(@RequestBody Bottle bottle, HttpServletResponse response) {
         boolean bottleValid = bottleService.validateBottle(bottle);
         response.setStatus(bottleValid ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_ACCEPTABLE);
